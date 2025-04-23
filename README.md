@@ -8,7 +8,7 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 
 - **IR Signal Learning**: Captures IR signals using a receiver module and decodes them for analysis.
 - **Signal Reproduction**: Re-transmits the learned IR signals through an IR LED, allowing the ESP32 to mimic remote controls.
-- **Protocol Support**: Currently supports Pulse Distance protocols, with plans to expand compatibility.&#8203;:contentReference[oaicite:1]{index=1}
+- **Protocol Support**: Currently supports Pulse Distance protocols, with plans to expand compatibility.
 - **OLED Display**: The system supports a 128x64 OLED Display.
 
 ## 🚀 Future Enhancements
