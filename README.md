@@ -34,3 +34,11 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 - **Software**:
   - [Arduino IDE](https://www.arduino.cc/en/software)
   - [Arduino-IRremote Library](https://github.com/Arduino-IRremote/Arduino-IRremote)
+  - [Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library)
+  - [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306)
+
+## 🤖 Initial Prototype
+
+An initial prototype was already made and soldered in a perf board, future plans are to make a 3D-printed case for the circuit.
+
+![Prototype](info/circuit_image.png)
