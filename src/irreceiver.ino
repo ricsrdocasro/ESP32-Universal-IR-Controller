@@ -25,6 +25,21 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define BUTTON_RIGHT   32
 
 // IRremote
+#define DECODE_DENON        // Includes Sharp
+#define DECODE_JVC
+#define DECODE_KASEIKYO
+#define DECODE_PANASONIC    // alias for DECODE_KASEIKYO
+#define DECODE_LG
+#define DECODE_NEC          // Includes Apple and Onkyo. To enable all protocols , just comment/disable this line.
+#define DECODE_SAMSUNG
+#define DECODE_SONY
+#define DECODE_RC5
+#define DECODE_RC6
+#define DECODE_BOSEWAVE
+#define DECODE_LEGO_PF
+#define DECODE_MAGIQUEST
+#define DECODE_WHYNTER
+#define DECODE_FAST
 #define DECODE_DISTANCE_WIDTH // Universal decoder for pulse distance width protocols
 #define DECODE_HASH             // special decoder for all protocols
 #define RAW_BUFFER_LENGTH  1000 // Especially useful for unknown and probably long protocols
@@ -207,7 +222,7 @@ void menu_de_acao(){
     display.setCursor(24,32);
     display.print("Mandando IR...");
     display.display();
-    mandar_sem_EEPROM(&sStoredIRData);
+    mandar_sem_EEPROM();
     //mandar_IR();
   }
 }
@@ -224,38 +239,65 @@ void atualizar_display(){
 
 void receber_sem_EEPROM(){
   sinalRecebido = false;
+  IrReceiver.resume();
+
+  Serial.print("Sinal Recebido: ");
+  Serial.println(sinalRecebido);
   
   while(!sinalRecebido){
     if (IrReceiver.decode()) {
       sinalRecebido = true;
 
       if (IrReceiver.decodedIRData.protocol == UNKNOWN) {
-          Serial.println(F("Received noise or an unknown (or not yet enabled) protocol"));
-          // We have an unknown protocol here, print extended info
-          IrReceiver.printIRResultRawFormatted(&Serial, true);
-          IrReceiver.resume(); // Do it here, to preserve raw data for printing with printIRResultRawFormatted()
-      } else {
-          IrReceiver.resume(); // Early enable receiving of the next IR frame
-          IrReceiver.printIRResultShort(&Serial);
-          IrReceiver.printIRSendUsage(&Serial);
-      }
+        Serial.println(F("Received noise or an unknown (or not yet enabled) protocol"));
+        // We have an unknown protocol here, print extended info
+        IrReceiver.printIRResultRawFormatted(&Serial, true);
+        
+        sStoredIRData.receivedIRData = IrReceiver.decodedIRData;
 
-      Serial.println();
-      IrReceiver.stop();
+        IrReceiver.resume(); // Do it here, to preserve raw data for printing with printIRResultRawFormatted()
+      } else if (IrReceiver.decodedIRData.protocol == NEC) {
+        sStoredIRData.receivedIRData = IrReceiver.decodedIRData;
+
+        // Parâmetros do protocolo NEC
+        uint16_t address = IrReceiver.decodedIRData.address;
+        uint8_t command = IrReceiver.decodedIRData.command;
+
+        Serial.print("Endereço: 0x");
+        Serial.print(address, HEX);
+        Serial.print(" | Comando: 0x");
+        Serial.println(command, HEX);
+        IrReceiver.resume();
+
+        // Armazene os valores de endereço e comando conforme necessário
+      } else {
+        sStoredIRData.receivedIRData = IrReceiver.decodedIRData;
+
+        IrReceiver.resume(); // Early enable receiving of the next IR frame
+        IrReceiver.printIRResultShort(&Serial);
+        IrReceiver.printIRSendUsage(&Serial);
+      }
     }
+
+    Serial.print("Sinal Recebido: ");
+    Serial.println(sinalRecebido);
   }
 }
 
-void mandar_sem_EEPROM(storedIRDataStruct *aIRDataToSend){
+void mandar_sem_EEPROM(){
+  Serial.print("Sinal Recebido: ");
+  Serial.println(sinalRecebido);
+
   if (!sinalRecebido) {
     Serial.println("Nenhum sinal armazenado para enviar.");
     return;
   }
 
-  auto tProtocol = aIRDataToSend->receivedIRData.protocol;
-  if (tProtocol == UNKNOWN || tProtocol == PULSE_WIDTH || tProtocol == PULSE_DISTANCE /* i.e. raw */) {
+  auto tProtocol = IrReceiver.decodedIRData.protocol;
+  if (tProtocol == UNKNOWN || tProtocol == PULSE_WIDTH || tProtocol == PULSE_DISTANCE || tProtocol == NEC) {
+    Serial.println("Protocol: UNKNOWN, NEC or PULSE DISTANCE");
     // Assume 38 KHz
-    IrSender.sendRaw(aIRDataToSend->rawCode, aIRDataToSend->rawCodeLength, 38);
+    IrSender.sendRaw(IrReceiver.decodedIRData.rawDataPtr->rawbuf, IrReceiver.decodedIRData.rawDataPtr->rawlen, 38);
 
     // Determinação da ordem dos bits
     bool isLsbFirst = !(IrReceiver.decodedIRData.flags & IRDATA_FLAGS_IS_MSB_FIRST);
@@ -270,10 +312,22 @@ void mandar_sem_EEPROM(storedIRDataStruct *aIRDataToSend){
     uint16_t zeroSpace = IrReceiver.decodedIRData.DistanceWidthTimingInfo.ZeroSpaceMicros;
     uint16_t bitCount = IrReceiver.decodedIRData.numberOfBits;
 
+    // Parâmetros do protocolo NEC
+    uint16_t address = IrReceiver.decodedIRData.address;
+    uint8_t command = IrReceiver.decodedIRData.command;
+
+    Serial.print("Endereço: 0x");
+    Serial.print(address, HEX);
+    Serial.print(" | Comando: 0x");
+    Serial.println(command, HEX);
+
     // Dados brutos do sinal
     IRRawDataType* rawData = IrReceiver.decodedIRData.decodedRawDataArray;
 
-    // Retransmissão do sinal
+    // Retransmissão do sinal em NEC
+    IrSender.sendNEC(address, command, 2);
+
+    // Retransmissão do sinal em Pulse Distance
     IrSender.sendPulseDistanceWidthFromArray(
       38, // Frequência em kHz
       headerMark, headerSpace,
@@ -285,9 +339,12 @@ void mandar_sem_EEPROM(storedIRDataStruct *aIRDataToSend){
       0  // Número de repetições
     );
   } else {
+    Serial.print("Protocol: ");
+    Serial.println(tProtocol);
+
     // Use the write function, which does the switch for different protocols
-    IrSender.write(&aIRDataToSend->receivedIRData);
-    printIRResultShort(&Serial, &aIRDataToSend->receivedIRData, true);
+    IrSender.write(&sStoredIRData.receivedIRData);
+    printIRResultShort(&Serial, &sStoredIRData.receivedIRData, true);
   }
 }
 
