@@ -1,4 +1,4 @@
-# ESP32 IR Universal Remote 
+# ESP32 IR Universal Remote 
 
 ![Project Banner](info/cover_img.jpg)
 
@@ -21,33 +21,33 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 ### Prerequisites
 
 - **Hardware**:
-  - ESP32-WROOM-32;
-  - IR receiver module (e.g., TSOP38238);
-  - IR LED for transmission;
-  - 128x64 OLED Display;
-  - 3 x Push-buttons;
-  - 2N2222a Transistor;
-  - 2 x 47 Ohm Resistors;
-  - 2 x 300 Ohm Resistors;
-  - 3 x 10k Ohm Resistors
+  - ESP32-WROOM-32;
+  - IR receiver module (e.g., TSOP38238);
+  - IR LED for transmission;
+  - 128x64 OLED Display;
+  - 3 x Push-buttons;
+  - 2N2222a Transistor;
+  - 2 x 47 Ohm Resistors;
+  - 2 x 300 Ohm Resistors;
+  - 3 x 10k Ohm Resistors
 
 - **Software**:
-  - [Arduino IDE](https://www.arduino.cc/en/software)
-  - [Arduino-IRremote Library](https://github.com/Arduino-IRremote/Arduino-IRremote)
-  - [Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library)
-  - [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306)
+  - [Arduino IDE](https://www.arduino.cc/en/software)
+  - [Arduino-IRremote Library](https://github.com/Arduino-IRremote/Arduino-IRremote)
+  - [Adafruit-GFX-Library](https://github.com/adafruit/Adafruit-GFX-Library)
+  - [Adafruit_SSD1306](https://github.com/adafruit/Adafruit_SSD1306)
 
 ## 🤖 Initial Prototype
 
 An initial prototype was already made and soldered in a perf board, and a case housing for the circuit.
 
-<div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px;">
-  <img src="info/circuit_image.png" alt="Circuit prototype" style="max-width: 48%; height: auto;">
-  <img src="3dmodel/img/3d_model_render.png" alt="Case for the circuit" style="max-width: 48%; height: auto;">
+<div style="display: flex;">
+  <img src="info/circuit_image.png" alt="Circuit prototype" style="max-width: 48%; height: auto; margin-right: 20px;">
+  <img src="3dmodel/img/3d_model_render.png" alt="Case for the circuit" style="max-width: 48%; height: auto;">
 </div>
 
 ## 📦 3D Printed Enclosure
 
 To house the prototype, a custom 3D-printed enclosure was designed. This case provides protection for the electronic components and a clean, organized look for the device, while also integrating the OLED display and push-buttons for user interaction. The design includes cutouts for the IR LED and receiver module, ensuring optimal performance.
 
-![3D Model Animation](3dmodel/img/3d_model_animation.gif)
+<img src="3dmodel/img/3d_model_animation.gif" alt="3D Model Animation" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
