@@ -8,13 +8,13 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 
 - **IR Signal Learning**: Captures IR signals using a receiver module and decodes them for analysis.
 - **Signal Reproduction**: Re-transmits the learned IR signals through an IR LED, allowing the ESP32 to mimic remote controls.
-- **Protocol Support**: Currently supports Pulse Distance protocols, with plans to expand compatibility.
+- **Protocol Support**: Currently supports all protocols covered by the library, as well as pulse distance and raw signals.
 - **OLED Display**: The system supports a 128x64 OLED Display.
 
 ## 🚀 Future Enhancements
 
-- **Extended Protocol Compatibility**: Future work seeks to make an option for the user to receive and send signals from all protocols supported by the library.
 - **EEPROM Storage**: Currently working on EEPROM storage to allow the user to store IR signals in the ESP32 memory.
+- **Emulate Known Remote Controls**: Further plans seek to make an option to the user to emulate remote controls of various devices.
 
 ## 🛠️ Getting Started
 
@@ -39,14 +39,11 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 
 ## 🤖 Initial Prototype
 
-An initial prototype was already made and soldered in a perf board, and a case housing for the circuit.
+An initial prototype was already made and soldered in a perf board, and a case housing was made to hold the circuit.
 
-<div style="display: flex;">
-  <img src="info/circuit_image.png" alt="Circuit prototype" style="max-width: 48%; height: auto; margin-right: 20px;">
-  <img src="3dmodel/img/3d_model_render.png" alt="Case for the circuit" style="max-width: 48%; height: auto;">
-</div>
-
-## 📦 3D Printed Enclosure
+<img src="info/circuit_image.png" alt="Circuit prototype" style="float: left; max-width: 48%; height: auto; margin-right: 20px;">
+<img src="3dmodel/img/3d_model_render.png" alt="Case for the circuit" style="float: left; max-width: 48%; height: auto;">
+<div style="clear: both;"></div> ## 📦 3D Printed Enclosure
 
 To house the prototype, a custom 3D-printed enclosure was designed. This case provides protection for the electronic components and a clean, organized look for the device, while also integrating the OLED display and push-buttons for user interaction. The design includes cutouts for the IR LED and receiver module, ensuring optimal performance.
 
