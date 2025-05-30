@@ -41,9 +41,11 @@ This project enables an ESP32 to capture and replicate infrared (IR) signals fro
 
 An initial prototype was already made and soldered in a perf board, and a case housing was made to hold the circuit.
 
-<img src="info/circuit_image.png" alt="Circuit prototype" style="float: left; max-width: 48%; height: auto; margin-right: 20px;">
-<img src="3dmodel/img/3d_model_render.png" alt="Case for the circuit" style="float: left; max-width: 48%; height: auto;">
-<div style="clear: both;"></div> ## 📦 3D Printed Enclosure
+Circuit in perf board           |  Render of the case
+:-------------------------:|:-------------------------:
+![](info/circuit_image.png)  |  ![](3dmodel/img/3d_model_render.png)
+
+## 📦 3D Printed Enclosure
 
 To house the prototype, a custom 3D-printed enclosure was designed. This case provides protection for the electronic components and a clean, organized look for the device, while also integrating the OLED display and push-buttons for user interaction. The design includes cutouts for the IR LED and receiver module, ensuring optimal performance.
 
